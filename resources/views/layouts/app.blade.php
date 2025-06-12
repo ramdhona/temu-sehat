@@ -38,6 +38,8 @@
     <!-- Tambahkan di bagian akhir body sebelum </body> untuk JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- pastikan jQuery sudah ada -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 

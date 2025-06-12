@@ -21,10 +21,15 @@
                         </div>
                     </header>
 
-                    <!-- Menampilkan alert menggunakan JavaScript jika ada session 'success' -->
-                    @if(session('success'))
+                    <!-- Menampilkan alert menggunakan SweetAlert jika ada session 'success' -->
+                    @if (session('success'))
                         <script type="text/javascript">
-                            alert("{{ session('success') }}");
+                            Swal.fire({
+                                title: 'Success!',
+                                text: '{{ session('success') }}',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
                         </script>
                     @endif
 
@@ -43,30 +48,26 @@
                             <!-- Loop untuk menampilkan semua obat -->
                             @foreach ($obats as $obat)
                                 <tr>
-                                    <!-- Menampilkan nomor urut -->
                                     <th scope="row" class="align-middle text-start">{{ $loop->iteration }}</th>
-
-                                    <!-- Menampilkan nama obat -->
                                     <td class="align-middle text-start">{{ $obat->nama_obat }}</td>
-
-                                    <!-- Menampilkan kemasan obat -->
                                     <td class="align-middle text-start">{{ $obat->kemasan }}</td>
-
-                                    <!-- Menampilkan harga obat dengan format Rp (Rupiah) -->
                                     <td class="align-middle text-start">
                                         {{ 'Rp' . number_format($obat->harga, 0, ',', '.') }}
                                     </td>
-
                                     <td class="flex items-center gap-3">
-                                        <!-- Tombol Edit untuk mengedit data obat -->
-                                        <a href="{{ route('dokter.obat.edit', $obat->id) }}" class="btn btn-secondary btn-sm">Edit</a>
+                                        <!-- Tombol Edit -->
+                                        <a href="{{ route('dokter.obat.edit', $obat->id) }}"
+                                            class="btn btn-secondary btn-sm">Edit</a>
 
-                                        <!-- Form untuk menghapus data obat -->
-                                        <form action="{{ route('dokter.obat.destroy', $obat->id) }}" method="POST">
+                                        <!-- Tombol Delete dengan konfirmasi menggunakan SweetAlert -->
+                                        <form action="{{ route('dokter.obat.destroy', $obat->id) }}" method="POST"
+                                            class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <!-- Tombol Delete untuk menghapus data obat -->
-                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                onclick="confirmDelete(event)">
+                                                Delete
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
@@ -77,4 +78,27 @@
             </div>
         </div>
     </div>
+
+    <!-- JavaScript untuk konfirmasi penghapusan dengan SweetAlert -->
+    <script>
+        function confirmDelete(event) {
+            event.preventDefault(); // Mencegah form untuk submit langsung
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data obat akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.closest('form').submit(); // Men-submit form jika pengguna mengkonfirmasi
+                }
+            });
+        }
+    </script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </x-app-layout>
