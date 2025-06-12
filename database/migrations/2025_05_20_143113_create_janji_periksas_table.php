@@ -14,14 +14,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Membuat tabel 'janji_periksas'
         Schema::create('janji_periksas', function (Blueprint $table) {
-            $table->id(); // Kolom ID sebagai primary key
-            $table->foreignId('id_pasien')->constrained('users')->onDelete('cascade'); // Kolom 'id_pasien' yang mengacu pada tabel 'users' (pasien). Jika pasien dihapus, janji temu terkait juga akan dihapus.
-            $table->foreignId('id_jadwal')->constrained('jadwal_periksas')->onDelete('cascade'); // Kolom 'id_jadwal' yang mengacu pada tabel 'jadwal_periksas'. Jika jadwal periksa dihapus, janji temu terkait juga akan dihapus.
-            $table->text('keluhan'); // Kolom untuk menyimpan keluhan yang disampaikan oleh pasien
-            $table->integer('no_antrian'); // Kolom untuk menyimpan nomor antrian pasien pada jadwal pemeriksaan
-            $table->timestamps(); // Kolom untuk mencatat waktu pembuatan dan pembaruan janji temu
+            $table->id();
+            $table->foreignId('id_pasien')->constrained('users')->onDelete('cascade');
+            $table->foreignId('id_jadwal_periksa')->constrained('jadwal_periksas')->onDelete('cascade');
+            $table->text('keluhan');
+            $table->string('no_antrian', 10);
+            $table->timestamps();
         });
     }
 

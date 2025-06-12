@@ -39,11 +39,9 @@
                 <table class="table mt-6 overflow-hidden rounded table-hover">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Hari</th>
-                            <th scope="col">Jam Mulai</th>
-                            <th scope="col">Jam Selesai</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">No Urut</th>
+                            <th scope="col">Nama Pasien</th>
+                            <th scope="col">Keluhan</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>

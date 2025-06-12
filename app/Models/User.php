@@ -39,11 +39,12 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function jadwalPeriksa()
-    {
-        // Menghubungkan model User dengan model JadwalPeriksa berdasarkan 'id_dokter'
-        return $this->hasMany(JadwalPeriksa::class, 'id_dokter');
-    }
+   public function jadwalPeriksas(){
+    return $this->hasMany(JadwalPeriksa::class, 'id_dokter');
+}
+public function janjiPeriksas(){
+    return $this->hasMany(JanjiPeriksa::class, 'id_pasien');
+}
 
     /**
      * Menentukan hubungan satu ke banyak (HasMany) dengan model JanjiPeriksa.

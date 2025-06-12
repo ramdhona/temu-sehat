@@ -11,28 +11,46 @@ class JadwalPeriksaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * Fungsi ini digunakan untuk mengisi tabel 'jadwal_periksas' dengan data jadwal pemeriksaan dokter.
      */
-    public function run()
+    public function run(): void
     {
-        // Mengambil dokter pertama dengan peran 'dokter' dari tabel 'users'
-        $dokter1 = User::where('role', 'dokter')->first();
+        // Get all doctor IDs
+        $dokters = User::where('role', 'dokter')->get();
 
-        // Menyisipkan data jadwal pemeriksaan dokter ke dalam tabel 'jadwal_periksas'
-        JadwalPeriksa::insert([
-            [
-                'id_dokter' => $dokter1->id, // Menyimpan ID dokter yang diambil dari dokter pertama
-                'hari' => 'Senin',            // Hari jadwal pemeriksaan
-                'jam_mulai' => '08:00:00',    // Jam mulai pemeriksaan
-                'jam_selesai' => '12:00:00',  // Jam selesai pemeriksaan
-            ],
-            [
-                'id_dokter' => $dokter1->id, // Menyimpan ID dokter yang sama untuk jadwal berikutnya
-                'hari' => 'Rabu',             // Hari jadwal pemeriksaan
-                'jam_mulai' => '13:00:00',   // Jam mulai pemeriksaan
-                'jam_selesai' => '17:00:00', // Jam selesai pemeriksaan
-            ]
-        ]);
+        // Days of the week
+        $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+
+        // Create schedules for each doctor
+        foreach ($dokters as $dokter) {
+            // Assign 2 working days per doctor (different for each)
+            $doctorDays = array_slice($days, $dokter->id % 5, 2);
+
+            $firstSchedule = true; // Flag to mark only the first schedule as active
+
+            foreach ($doctorDays as $day) {
+                // Morning schedule (8:00 - 12:00)
+                JadwalPeriksa::create([
+                    'id_dokter' => $dokter->id,
+                    'hari' => $day,
+                    'jam_mulai' => '08:00:00',
+                    'jam_selesai' => '12:00:00',
+                    'status' => $firstSchedule ? true : false, // Only first schedule is active (true)
+                ]);
+
+                $firstSchedule = false; // Mark subsequent schedules as inactive
+
+                // Afternoon schedule (13:00 - 16:00)
+                // Only for some doctors (those with even IDs for variety)
+                if ($dokter->id % 2 == 0) {
+                    JadwalPeriksa::create([
+                        'id_dokter' => $dokter->id,
+                        'hari' => $day,
+                        'jam_mulai' => '13:00:00',
+                        'jam_selesai' => '16:00:00',
+                        'status' => false, // All afternoon schedules are inactive (false)
+                    ]);
+                }
+            }
+        }
     }
 }

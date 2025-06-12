@@ -14,20 +14,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Membuat tabel 'jadwal_periksas'
         Schema::create('jadwal_periksas', function (Blueprint $table) {
-            $table->id(); // Kolom ID sebagai primary key
-            $table->foreignId('id_dokter')->constrained('users')->onDelete('cascade'); // Kolom 'id_dokter' yang mengacu pada tabel 'users' (dokter)
-            // Menggunakan 'foreignId' untuk membuat relasi dengan tabel 'users' (dokter). Jika dokter dihapus, maka jadwal periksa terkait juga akan dihapus (cascade).
-
-            // Kolom 'hari' yang berisi hari dalam seminggu, dengan nilai yang terbatas menggunakan enum
-            $table->enum('hari', ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu']);
-
-            // Kolom 'jam_mulai' dan 'jam_selesai' untuk menyimpan waktu mulai dan waktu selesai pemeriksaan
-            $table->time('jam_mulai'); // Kolom waktu mulai pemeriksaan
-            $table->time('jam_selesai'); // Kolom waktu selesai pemeriksaan
-
-            // Kolom waktu pembuatan dan pembaruan secara otomatis
+            $table->id();
+            $table->foreignId('id_dokter')->constrained('users')->onDelete('cascade');
+            $table->enum('hari', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']);
+            $table->time('jam_mulai');
+            $table->time('jam_selesai');
+            $table->boolean('status');
             $table->timestamps();
         });
     }

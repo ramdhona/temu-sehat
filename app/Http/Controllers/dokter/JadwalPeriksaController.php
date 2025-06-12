@@ -74,14 +74,14 @@ class JadwalPeriksaController extends Controller
         if ($jadwal->status !== 'aktif') {
             //Nonaktifkan jadwal aktif lain untuk dokter yang sama
             JadwalPeriksa::where('id_dokter', $jadwal->id_dokter)
-                ->where('status', 'aktif')
-                ->update(['status' => 'nonaktif']);
+                ->where('status', 1)
+                ->update(['status' => 0]);
 
             // Aktifkan jadwal ini
-            $jadwal->status = 'aktif';
+            $jadwal->status = 1;
         } else {
             // Jika jadwal saat ini aktif, jadikan nonaktif
-            $jadwal->status = 'nonaktif';
+            $jadwal->status = 0;
         }
 
         // Simpan perubahan status jadwal
