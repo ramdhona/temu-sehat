@@ -1,96 +1,61 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            {{ __('Jadwal Periksa') }}
+            {{ __('Daftar Periksa Pasien') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
             <div class="p-4 bg-white shadow-sm sm:p-8 sm:rounded-lg">
-                <!-- Header untuk menampilkan judul dan tombol untuk menambah jadwal -->
-                <header class="flex items-center justify-between">
-                    <h2 class="text-lg font-medium text-gray-900">
-                        {{ __('Daftar Jadwal Periksa') }}
-                    </h2>
+                <section>
+                    <!-- Header untuk daftar periksa -->
+                    <header class="flex items-center justify-between">
+                        <h2 class="text-lg font-medium text-gray-900">
+                            {{ __('Daftar Periksa Pasien') }}
+                        </h2>
 
-                    <div class="flex-col items-center justify-center text-center">
-                        <!-- Tombol untuk menambah jadwal baru -->
-                        <a href="{{ route('dokter.jadwal.create') }}" class="btn btn-primary">Tambah Jadwal</a>
+                        <div class="flex-col items-center justify-center text-center">
+                            <!-- Tombol untuk melakukan aksi lain jika diperlukan -->
+                            <!-- Contoh tombol untuk menambah atau melakukan aksi lain -->
+                        </div>
+                    </header>
 
-                        <!-- Menampilkan pesan sukses jika status session adalah 'jadwal-created' -->
-                        @if (session('status') === 'jadwal-created')
-                            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                                class="text-sm text-gray-600">
-                                {{ __('Jadwal berhasil dibuat.') }}
-                            </p>
-                        @endif
-                    </div>
-                </header>
-
-                <!-- Menampilkan alert menggunakan JavaScript jika ada session 'success' -->
-                @if (session('success'))
-                    <script type="text/javascript">
-                        alert("{{ session('success') }}");
-                    </script>
-                @endif
-
-                <!-- Tabel untuk menampilkan daftar jadwal pemeriksaan -->
-                <table class="table mt-6 overflow-hidden rounded table-hover">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">No Urut</th>
-                            <th scope="col">Nama Pasien</th>
-                            <th scope="col">Keluhan</th>
-                            <th scope="col">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Loop untuk menampilkan semua jadwal -->
-                        @foreach ($jadwals as $jadwal)
+                    <!-- Tabel daftar periksa pasien -->
+                    <table class="table mt-6 overflow-hidden rounded table-hover">
+                        <thead class="thead-light">
                             <tr>
-                                <!-- Menampilkan nomor urut jadwal -->
-                                <th scope="row" class="align-middle text-start">{{ $loop->iteration }}</th>
-                                <!-- Menampilkan hari jadwal -->
-                                <td class="align-middle text-start">{{ $jadwal->hari }}</td>
-                                <!-- Menampilkan jam mulai jadwal -->
-                                <td class="align-middle text-start">{{ $jadwal->jam_mulai }}</td>
-                                <!-- Menampilkan jam selesai jadwal -->
-                                <td class="align-middle text-start">{{ $jadwal->jam_selesai }}</td>
-                                <td class="align-middle text-start">
-                                    <!-- Menampilkan badge dengan status 'aktif' atau 'nonaktif' berdasarkan nilai boolean -->
-                                    <span
-                                        class="badge {{ $jadwal->status == 1 ? 'bg-success' : 'bg-danger' }} text-white fw-bold fs-5">
-                                        {{ $jadwal->status == 1 ? 'Aktif' : 'Nonaktif' }}
-                                    </span>
-                                </td>
-
-
-                                <td class="flex items-center gap-3">
-                                    {{-- Tombol untuk mengubah status --}}
-                                    <form action="{{ route('dokter.jadwal.status', $jadwal->id) }}" method="POST">
-                                        @csrf
-                                        @method('POST')
-
-                                        <!-- Tombol untuk mengaktifkan atau menonaktifkan jadwal -->
-                                        <button type="submit"
-                                            class="btn {{ $jadwal->status == 1 ? 'btn-warning' : 'btn-success' }} btn-sm">
-                                            {{ $jadwal->status == 1 ? 'Nonaktifkan' : 'Aktifkan' }}
-                                        </button>
-                                    </form>
-
-                                    {{-- Tombol untuk menghapus jadwal --}}
-                                    <form action="{{ route('dokter.jadwal.destroy', $jadwal->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <!-- Tombol untuk menghapus jadwal -->
-                                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                                    </form>
-                                </td>
+                                <th scope="col">No Urut</th>
+                                <th scope="col">Nama Pasien</th>
+                                <th scope="col">Keluhan</th>
+                                <th scope="col">Aksi Periksa</th>
+                                <th scope="col">Edit</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($pasien as $key => $p)
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $p->pasien->nama }}</td>
+                                    <td>{{ $p->keluhan }}</td>
+                                    <td>
+                                        @if ($p->periksa)
+                                            <span
+                                                class="px-2 py-1 text-xs font-semibold text-white bg-green-500 rounded-full">
+                                                Sudah Diperiksa
+                                            </span>
+                                        @else
+                                            <a href="{{ route('dokter.memeriksa.periksa', $p->id) }}"
+                                                class="btn btn-primary">Periksa</a>
+                                        @endif
+                                    </td>
+                                    <td><a href="{{ route('dokter.memeriksa.edit', $p->id) }}"
+                                            class="btn btn-warning">Edit</a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </section>
             </div>
         </div>
     </div>
