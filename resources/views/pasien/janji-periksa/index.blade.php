@@ -20,6 +20,7 @@
                             </p>
                         </header>
 
+                        <!-- Form untuk menambahkan janji periksa -->
                         <form class="mt-6" action="{{ route('pasien.janji-periksa.store') }}" method="POST">
                             @csrf
                             <div class="form-group">
@@ -33,8 +34,8 @@
                                     <option>Pilih Dokter</option>
                                     @foreach ($dokters as $dokter)
                                         @foreach ($dokter->jadwalPeriksas as $jadwal)
-                                            <option value="{{ $dokter->id }}">
-                                                {{ $dokter->nama }} - Spesialis {{ $dokter->poli }} |
+                                            <option value="{{ $dokter->id }}">{{ $dokter->nama }} - Spesialis
+                                                {{ $dokter->poli }} |
                                                 {{ $jadwal->hari }},
                                                 {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H.i') }} -
                                                 {{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H.i') }}
@@ -49,11 +50,6 @@
                             </div>
                             <div class="flex items-center gap-4">
                                 <button type="submit" class="btn btn-primary">Submit</button>
-
-                                @if (session('status') === 'janji-periksa-created')
-                                    <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                                        class="text-sm text-gray-600">{{ __('Berhasil Dibuat.') }}</p>
-                                @endif
                             </div>
                         </form>
                     </section>
@@ -61,4 +57,19 @@
             </div>
         </div>
     </div>
+
+    <!-- SweetAlert2 Script -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Menampilkan SweetAlert ketika berhasil membuat janji
+        @if (session('status') === 'janji-periksa-created')
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Janji periksa Anda berhasil dibuat.',
+                confirmButtonText: 'OK'
+            });
+        @endif
+    </script>
 </x-app-layout>

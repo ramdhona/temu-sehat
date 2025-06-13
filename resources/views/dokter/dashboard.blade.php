@@ -1,25 +1,71 @@
 <x-app-layout>
-    <!-- Header Slot -->
     <x-slot name="header">
-        <!-- Menampilkan judul halaman di header -->
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }} <!-- Menampilkan teks 'Dashboard' -->
+            {{ __('Dashboard') }}
         </h2>
     </x-slot>
 
-    <!-- Konten Utama Halaman -->
     <div class="py-12">
-        <!-- Membuat container untuk konten dengan lebar maksimum 7xl dan padding yang menyesuaikan layar -->
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Membuat kotak untuk konten dengan latar belakang putih dan bayangan -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <!-- Menggunakan padding dan teks berwarna abu-abu -->
-                <div class="p-6 text-gray-900">
-                    <!-- Menampilkan pesan bahwa pengguna sudah login dan menyapa dokter dengan nama -->
-                    {{ __("You're logged in! Welcome Dokter") }} <!-- Teks selamat datang untuk dokter -->
-                    {{ Auth::user()->nama }} <!-- Menampilkan nama pengguna (dokter) yang sedang login -->
+            <!-- Grid untuk menampilkan 4 card -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- Card untuk Jumlah Obat -->
+                <div class="bg-green-500 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-pills text-4xl text-white"></i>
+                        <div class="text-white">
+                            <h3 class="text-xl font-semibold">Jumlah Obat</h3>
+                            <p class="text-3xl">{{ $jumlahObat }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card untuk Jumlah Jadwal -->
+                <div class="bg-blue-500 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-calendar-check text-4xl text-white"></i>
+                        <div class="text-white">
+                            <h3 class="text-xl font-semibold">Jumlah Jadwal</h3>
+                            <p class="text-3xl">{{ $jumlahJadwal }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card untuk Jumlah Pasien -->
+                <div class="bg-yellow-500 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-users text-4xl text-white"></i>
+                        <div class="text-white">
+                            <h3 class="text-xl font-semibold">Jumlah Pasien</h3>
+                            <p class="text-3xl">{{ $jumlahPasien }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card untuk Jumlah Pasien yang Belum Diperiksa -->
+                <div class="bg-red-500 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-user-times text-4xl text-white"></i>
+                        <div class="text-white">
+                            <h3 class="text-xl font-semibold">Pasien Belum Diperiksa</h3>
+                            <p class="text-3xl">{{ $jumlahPasienBelumDiperiksa }}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Box untuk Menampilkan Pesan -->
+            <div class="bg-indigo-500 overflow-hidden shadow-sm sm:rounded-lg mt-6">
+                <div class="p-6 text-white">
+                    <h3 class="text-xl font-semibold">Selamat Datang Kembali</h3>
+                    <p class="text-2xl"> Dokter {{ Auth::user()->nama }}</p>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Link ke FontAwesome untuk ikon -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </x-app-layout>

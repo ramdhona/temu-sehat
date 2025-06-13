@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Dokter\DokterDashboardController;
 use App\Http\Controllers\Dokter\JadwalPeriksaController;
 use App\Http\Controllers\Dokter\MemeriksaController;
 use App\Http\Controllers\Dokter\ObatController;
 use App\Http\Controllers\Pasien\JanjiPeriksaController;
 use App\Http\Controllers\Pasien\RiwayatPeriksaController;
-use App\Http\Controllers\Dokter\RiwayatController; 
+use App\Http\Controllers\Dokter\RiwayatController;
+use App\Http\Controllers\Pasien\PasienDashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +28,10 @@ Route::middleware('auth')->group(function () {
 // Routes for 'dokter' role
 Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () {
     // Dashboard route
-    Route::get('/dashboard', function () {
-        return view('dokter.dashboard');
-    })->name('dokter.dashboard');
+    // Route::get('/dashboard', function () {
+    //     return view('dokter.dashboard');
+    // })->name('dokter.dashboard');
+    Route::get('/dashboard', [DokterDashboardController::class, 'index'])->middleware(['auth'])->name('dokter.dashboard');
 
     // Routes for 'obat'
     Route::prefix('obat')->group(function () {
@@ -68,9 +71,7 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () 
 
 // Routes for 'pasien' role
 Route::middleware(['auth', 'role:pasien'])->prefix('pasien')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('pasien.dashboard');
-    })->name('pasien.dashboard');
+    Route::middleware(['auth', 'role:pasien'])->get('/dashboard', [PasienDashboardController::class, 'index'])->name('pasien.dashboard');
 
     // Routes for 'janji-periksa' (Appointment)
     Route::prefix('janji-periksa')->group(function () {
