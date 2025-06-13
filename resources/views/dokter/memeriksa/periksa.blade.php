@@ -78,7 +78,20 @@
             </div>
         </div>
     </div>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- SweetAlert2 untuk sukses jika ada session 'success' -->
+    @if (session('success'))
+        <script type="text/javascript">
+            Swal.fire({
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
     <!-- JavaScript untuk Menghitung Harga Obat dan Total Pembayaran -->
     <script>
         $(document).ready(function() {

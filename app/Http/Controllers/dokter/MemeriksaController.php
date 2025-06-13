@@ -35,43 +35,45 @@ class MemeriksaController extends Controller
     }
 
     // Menyimpan hasil pemeriksaan
-    public function simpanPeriksa(Request $request, $id)
-    {
-        $janjiPeriksa = JanjiPeriksa::findOrFail($id);
+   public function simpanPeriksa(Request $request, $id)
+{
+    $janjiPeriksa = JanjiPeriksa::findOrFail($id);
 
-        // Validasi agar 'obat' selalu ada dan berupa array
-        $request->validate([
-            'catatan' => 'required',
-            'obat' => 'present|array' // 'present' memastikan key 'obat' ada, meski kosong
-        ]);
+    // Validasi agar 'obat' selalu ada dan berupa array
+    $request->validate([
+        'catatan' => 'required',
+        'obat' => 'present|array' // 'present' memastikan key 'obat' ada, meski kosong
+    ]);
 
-        $hargaObat = 0;
-        if ($request->has('obat')) {
-            // Ambil harga total dari semua obat yang dipilih
-            $hargaObat = Obat::whereIn('id', $request->obat)->sum('harga');
-        }
-
-        // Menyimpan data pemeriksaan
-        $periksa = Periksa::create([
-            'id_janji_periksa' => $janjiPeriksa->id,
-            'tgl_periksa' => now(),
-            'catatan' => $request->catatan,
-            // Biaya periksa (asumsi 150000) ditambah harga total obat
-            'biaya_periksa' => 150000 + $hargaObat,
-        ]);
-
-        // Menyimpan detail obat yang dipilih selama pemeriksaan
-        if ($request->has('obat')) {
-            foreach ($request->obat as $obatId) {
-                DetailPeriksa::create([
-                    'id_periksa' => $periksa->id,
-                    'id_obat' => $obatId,
-                ]);
-            }
-        }
-
-        return redirect()->route('dokter.memeriksa.index')->with('success', 'Data pemeriksaan berhasil disimpan.');
+    $hargaObat = 0;
+    if ($request->has('obat')) {
+        // Ambil harga total dari semua obat yang dipilih
+        $hargaObat = Obat::whereIn('id', $request->obat)->sum('harga');
     }
+
+    // Menyimpan data pemeriksaan
+    $periksa = Periksa::create([
+        'id_janji_periksa' => $janjiPeriksa->id,
+        'tgl_periksa' => now(),
+        'catatan' => $request->catatan,
+        // Biaya periksa (asumsi 150000) ditambah harga total obat
+        'biaya_periksa' => 150000 + $hargaObat,
+    ]);
+
+    // Menyimpan detail obat yang dipilih selama pemeriksaan
+    if ($request->has('obat')) {
+        foreach ($request->obat as $obatId) {
+            DetailPeriksa::create([
+                'id_periksa' => $periksa->id,
+                'id_obat' => $obatId,
+            ]);
+        }
+    }
+
+    // Redirect dengan SweetAlert success
+    return redirect()->route('dokter.memeriksa.index')->with('success', 'Data pemeriksaan berhasil disimpan.');
+}
+
 
     // Menampilkan halaman edit pemeriksaan pasien
     public function edit($id)
