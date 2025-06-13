@@ -8,34 +8,27 @@
     <div class="py-12">
         <div class="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
             <div class="p-4 bg-white shadow-sm sm:p-8 sm:rounded-lg">
-                <!-- Header untuk menampilkan judul dan tombol untuk menambah jadwal -->
                 <header class="flex items-center justify-between">
                     <h2 class="text-lg font-medium text-gray-900">
                         {{ __('Daftar Jadwal Periksa') }}
                     </h2>
-
                     <div class="flex-col items-center justify-center text-center">
-                        <!-- Tombol untuk menambah jadwal baru -->
                         <a href="{{ route('dokter.jadwal.create') }}" class="btn btn-primary">Tambah Jadwal</a>
-
-                        <!-- Menampilkan pesan sukses jika status session adalah 'jadwal-created' -->
-                        @if (session('status') === 'jadwal-created')
-                            <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
-                                class="text-sm text-gray-600">
-                                {{ __('Jadwal berhasil dibuat.') }}
-                            </p>
-                        @endif
                     </div>
                 </header>
 
-                <!-- Menampilkan alert menggunakan JavaScript jika ada session 'success' -->
+                <!-- Menampilkan alert menggunakan SweetAlert jika ada session 'success' -->
                 @if (session('success'))
                     <script type="text/javascript">
-                        alert("{{ session('success') }}");
+                        Swal.fire({
+                            title: 'Success!',
+                            text: '{{ session('success') }}',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
                     </script>
                 @endif
 
-                <!-- Tabel untuk menampilkan daftar jadwal pemeriksaan -->
                 <table class="table mt-6 overflow-hidden rounded table-hover">
                     <thead class="thead-light">
                         <tr>
@@ -48,45 +41,38 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Loop untuk menampilkan semua jadwal -->
                         @foreach ($jadwals as $jadwal)
                             <tr>
-                                <!-- Menampilkan nomor urut jadwal -->
                                 <th scope="row" class="align-middle text-start">{{ $loop->iteration }}</th>
-                                <!-- Menampilkan hari jadwal -->
                                 <td class="align-middle text-start">{{ $jadwal->hari }}</td>
-                                <!-- Menampilkan jam mulai jadwal -->
                                 <td class="align-middle text-start">{{ $jadwal->jam_mulai }}</td>
-                                <!-- Menampilkan jam selesai jadwal -->
                                 <td class="align-middle text-start">{{ $jadwal->jam_selesai }}</td>
                                 <td class="align-middle text-start">
-                                    <!-- Menampilkan badge dengan status 'aktif' atau 'nonaktif' berdasarkan nilai boolean -->
                                     <span
-                                        class="badge {{ $jadwal->status == 1 ? 'bg-success' : 'bg-danger' }} text-white fw-bold fs-5">
+                                        class="badge {{ $jadwal->status == 1 ? 'bg-success' : 'bg-danger' }} text-white">
                                         {{ $jadwal->status == 1 ? 'Aktif' : 'Nonaktif' }}
                                     </span>
                                 </td>
-
-
                                 <td class="flex items-center gap-3">
-                                    {{-- Tombol untuk mengubah status --}}
+                                    <!-- Toggle status button -->
                                     <form action="{{ route('dokter.jadwal.status', $jadwal->id) }}" method="POST">
                                         @csrf
                                         @method('POST')
-
-                                        <!-- Tombol untuk mengaktifkan atau menonaktifkan jadwal -->
                                         <button type="submit"
                                             class="btn {{ $jadwal->status == 1 ? 'btn-warning' : 'btn-success' }} btn-sm">
                                             {{ $jadwal->status == 1 ? 'Nonaktifkan' : 'Aktifkan' }}
                                         </button>
                                     </form>
 
-                                    {{-- Tombol untuk menghapus jadwal --}}
-                                    <form action="{{ route('dokter.jadwal.destroy', $jadwal->id) }}" method="POST">
+                                    <!-- Delete button with SweetAlert confirmation -->
+                                    <form action="{{ route('dokter.jadwal.destroy', $jadwal->id) }}" method="POST"
+                                        class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <!-- Tombol untuk menghapus jadwal -->
-                                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete(event)">
+                                            Hapus
+                                        </button>
                                     </form>
                                 </td>
                             </tr>
@@ -96,4 +82,27 @@
             </div>
         </div>
     </div>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmDelete(event) {
+            event.preventDefault(); // Prevent the form from submitting immediately
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Jadwal ini akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.closest('form').submit(); // Submit the form if confirmed
+                }
+            });
+        }
+    </script>
+
 </x-app-layout>

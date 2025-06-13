@@ -25,7 +25,9 @@
                             <div>
                                 <label for="hari" class="block text-sm font-medium text-gray-700">Hari</label>
                                 <!-- Dropdown untuk memilih hari (Senin - Minggu) -->
-                                <select name="hari" id="hari" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                                <select name="hari" id="hari"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    required>
                                     <option value="Senin">Senin</option>
                                     <option value="Selasa">Selasa</option>
                                     <option value="Rabu">Rabu</option>
@@ -36,18 +38,25 @@
                                 </select>
                             </div>
 
-                            <!-- Input untuk memilih jam mulai jadwal -->
-                            <div>
-                                <label for="jam_mulai" class="block text-sm font-medium text-gray-700">Jam Mulai</label>
-                                <!-- Input tipe time untuk memilih jam mulai -->
-                                <input type="time" name="jam_mulai" id="jam_mulai" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                            </div>
+                            <!-- Input untuk memilih jam mulai dan jam selesai jadwal -->
+                            <div class="flex space-x-4">
+                                <!-- Input untuk memilih jam mulai -->
+                                <div class="w-1/2">
+                                    <label for="jam_mulai" class="block text-sm font-medium text-gray-700">Jam
+                                        Mulai</label>
+                                    <input type="time" name="jam_mulai" id="jam_mulai"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                        required>
+                                </div>
 
-                            <!-- Input untuk memilih jam selesai jadwal -->
-                            <div>
-                                <label for="jam_selesai" class="block text-sm font-medium text-gray-700">Jam Selesai</label>
-                                <!-- Input tipe time untuk memilih jam selesai -->
-                                <input type="time" name="jam_selesai" id="jam_selesai" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                                <!-- Input untuk memilih jam selesai -->
+                                <div class="w-1/2">
+                                    <label for="jam_selesai" class="block text-sm font-medium text-gray-700">Jam
+                                        Selesai</label>
+                                    <input type="time" name="jam_selesai" id="jam_selesai"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                        required>
+                                </div>
                             </div>
 
                             <!-- Tombol untuk menyimpan jadwal yang baru -->
@@ -58,4 +67,17 @@
             </div>
         </div>
     </div>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Menampilkan SweetAlert2 jika ada session 'error' -->
+    @if (session('error'))
+        <script type="text/javascript">
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '{{ session('error') }}',
+            });
+        </script>
+    @endif
 </x-app-layout>
