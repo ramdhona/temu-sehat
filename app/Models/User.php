@@ -28,7 +28,7 @@ class User extends Authenticatable
         'no_hp',        // Nomor HP pengguna
         'no_ktp',       // Nomor KTP pengguna
         'no_rm',        // Nomor rekam medis (jika pasien)
-        'poli',         // Poli yang dipilih oleh pasien (jika pasien)
+        'poli_id',         // Poli yang dipilih oleh pasien (jika pasien)
         'email',        // Alamat email pengguna
         'password',     // Password pengguna (ter-enkripsi)
     ];
@@ -39,12 +39,17 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-   public function jadwalPeriksas(){
-    return $this->hasMany(JadwalPeriksa::class, 'id_dokter');
-}
-public function janjiPeriksas(){
-    return $this->hasMany(JanjiPeriksa::class, 'id_pasien');
-}
+   public function jadwalPeriksas()
+   {
+       // Menghubungkan model User dengan model JadwalPeriksa berdasarkan 'id_dokter'
+       return $this->hasMany(JadwalPeriksa::class, 'id_dokter');
+   }
+
+   public function janjiPeriksas()
+   {
+       // Menghubungkan model User dengan model JanjiPeriksa berdasarkan 'id_pasien'
+       return $this->hasMany(JanjiPeriksa::class, 'id_pasien');
+   }
 
     /**
      * Menentukan hubungan satu ke banyak (HasMany) dengan model JanjiPeriksa.
@@ -83,5 +88,17 @@ public function janjiPeriksas(){
             'email_verified_at' => 'datetime', // Mengonversi atribut 'email_verified_at' ke tipe datetime
             'password' => 'hashed',            // Mengonversi password menjadi hashed (terenkripsi)
         ];
+    }
+
+    /**
+     * Relasi antara User dan Poli.
+     * Setiap User (dokter/pasien) memiliki satu Poli.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function poli()
+    {
+        // Menghubungkan model User dengan model Poli berdasarkan 'poli_id'
+        return $this->belongsTo(Poli::class);
     }
 }

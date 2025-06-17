@@ -1,4 +1,5 @@
 <x-app-layout>
+    <!-- Bagian Header -->
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
             {{ __('Riwayat Periksa') }}
@@ -7,6 +8,7 @@
 
     <div class="py-12">
         <div class="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
+            <!-- Box untuk menampilkan tabel riwayat periksa -->
             <div class="p-4 bg-white shadow sm-sm:p-8 sm:rounded-lg">
                 <section>
                     <header>
@@ -15,7 +17,7 @@
                         </h2>
                     </header>
 
-                    {{-- Table --}}
+                    {{-- Tabel untuk menampilkan riwayat janji periksa --}}
                     <table class="table mt-6 overflow-hidden rounded table-hover">
                         <thead class="thead-light">
                             <tr>
@@ -33,19 +35,29 @@
                         <tbody>
                             @foreach ($janjiPeriksas as $janjiPeriksa)
                                 <tr>
+                                    <!-- Menampilkan nomor urut janji periksa -->
                                     <th scope="row" class="align-middle text-start">{{ $loop->iteration }}</th>
+                                    <!-- Menampilkan Poliklinik -->
                                     <td class="align-middle text-start">
-                                        {{ $janjiPeriksa->jadwalPeriksa->dokter->poli }}</td>
+                                        {{ $janjiPeriksa->jadwalPeriksa->dokter->poli }}
+                                    </td>
+                                    <!-- Menampilkan Nama Dokter -->
                                     <td class="align-middle text-start">
-                                        {{ $janjiPeriksa->jadwalPeriksa->dokter->nama }}</td>
+                                        {{ $janjiPeriksa->jadwalPeriksa->dokter->nama }}
+                                    </td>
+                                    <!-- Menampilkan Hari Pemeriksaan -->
                                     <td class="align-middle text-start">{{ $janjiPeriksa->jadwalPeriksa->hari }}</td>
+                                    <!-- Menampilkan Jam Mulai -->
                                     <td class="align-middle text-start">
                                         {{ \Carbon\Carbon::parse($janjiPeriksa->jadwalPeriksa->jam_mulai)->format('H.i') }}
                                     </td>
+                                    <!-- Menampilkan Jam Selesai -->
                                     <td class="align-middle text-start">
                                         {{ \Carbon\Carbon::parse($janjiPeriksa->jadwalPeriksa->jam_selesai)->format('H.i') }}
                                     </td>
+                                    <!-- Menampilkan Nomor Antrian -->
                                     <td class="align-middle text-start">{{ $janjiPeriksa->no_antrian }}</td>
+                                    <!-- Menampilkan Status Pemeriksaan -->
                                     <td class="align-middle text-start">
                                         @if (is_null($janjiPeriksa->periksa))
                                             <span class="badge badge-pill badge-warning">Belum Diperiksa</span>
@@ -53,12 +65,14 @@
                                             <span class="badge badge-pill badge-success">Sudah Diperiksa</span>
                                         @endif
                                     </td>
+                                    <!-- Menampilkan Aksi (Detail atau Riwayat) -->
                                     <td class="align-middle text-start">
                                         @if (is_null($janjiPeriksa->periksa))
+                                            <!-- Tombol untuk melihat detail janji periksa -->
                                             <a href="{{ route('pasien.riwayat-periksa.detail', $janjiPeriksa->id) }}"
                                                 class="btn btn-info">Detail</a>
 
-                                            <!-- Modal -->
+                                            <!-- Modal untuk menampilkan detail riwayat pemeriksaan -->
                                             <div class="modal fade bd-example-modal-lg"
                                                 id="detailModal{{ $janjiPeriksa->id }}" tabindex="-1" role="dialog"
                                                 aria-labelledby="detailModalTitle{{ $janjiPeriksa->id }}"
@@ -67,7 +81,7 @@
                                                     role="document">
                                                     <div class="modal-content">
 
-                                                        <!-- Modal Header -->
+                                                        <!-- Header Modal -->
                                                         <div class="modal-header">
                                                             <h5 class="modal-title font-weight-bold"
                                                                 id="riwayatModalLabel{{ $janjiPeriksa->id }}">
@@ -79,9 +93,10 @@
                                                             </button>
                                                         </div>
 
-                                                        <!-- Modal Body -->
+                                                        <!-- Body Modal -->
                                                         <div class="modal-body">
                                                             <ul class="list-group">
+                                                                <!-- Menampilkan informasi detail pemeriksaan -->
                                                                 <li class="list-group-item">
                                                                     <strong>Poliklinik:</strong>
                                                                     {{ $janjiPeriksa->jadwalPeriksa->dokter->poli }}
@@ -104,7 +119,7 @@
                                                                 </li>
                                                             </ul>
 
-                                                            <!-- Highlight Nomor Antrian -->
+                                                            <!-- Menampilkan Nomor Antrian -->
                                                             <div class="mt-4 text-center">
                                                                 <div class="mb-2 h5 font-weight-bold">Nomor Antrian Anda
                                                                 </div>
@@ -115,7 +130,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <!-- Modal Footer -->
+                                                        <!-- Footer Modal -->
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-dismiss="modal">
@@ -127,6 +142,7 @@
                                                 </div>
                                             </div>
                                         @else
+                                            <!-- Tombol untuk melihat riwayat pemeriksaan -->
                                             <a href="{{ route('pasien.riwayat-periksa.riwayat', $janjiPeriksa->id) }}"
                                                 class="btn btn-secondary">Riwayat</a>
                                         @endif

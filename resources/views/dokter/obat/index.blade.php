@@ -9,19 +9,20 @@
         <div class="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
             <div class="p-4 bg-white shadow-sm sm:p-8 sm:rounded-lg">
                 <section>
-                    <!-- Header untuk daftar obat -->
                     <header class="flex items-center justify-between">
                         <h2 class="text-lg font-medium text-gray-900">
                             {{ __('Daftar Obat') }}
                         </h2>
 
+                        <!-- Tombol untuk menambah obat dan cek data yang dihapus -->
                         <div class="flex-col items-center justify-center text-center">
-                            <!-- Tombol untuk menambah obat baru -->
                             <a href="{{ route('dokter.obat.create') }}" class="btn btn-primary">Tambah Obat</a>
+                            <a href="{{ route('dokter.obat.deleted') }}" class="btn btn-warning ">Cek Data yang
+                                Dihapus</a>
                         </div>
                     </header>
 
-                    <!-- Menampilkan alert menggunakan SweetAlert jika ada session 'success' -->
+                    <!-- Menampilkan notifikasi success jika ada pesan sukses -->
                     @if (session('success'))
                         <script type="text/javascript">
                             Swal.fire({
@@ -33,7 +34,7 @@
                         </script>
                     @endif
 
-                    <!-- Tabel daftar obat -->
+                    <!-- Menampilkan tabel daftar obat -->
                     <table class="table mt-6 overflow-hidden rounded table-hover">
                         <thead class="thead-light">
                             <tr>
@@ -45,7 +46,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Loop untuk menampilkan semua obat -->
+                            <!-- Loop untuk menampilkan data obat -->
                             @foreach ($obats as $obat)
                                 <tr>
                                     <th scope="row" class="align-middle text-start">{{ $loop->iteration }}</th>
@@ -55,20 +56,25 @@
                                         {{ 'Rp' . number_format($obat->harga, 0, ',', '.') }}
                                     </td>
                                     <td class="flex items-center gap-3">
-                                        <!-- Tombol Edit -->
+                                        <!-- Tombol untuk mengedit obat -->
                                         <a href="{{ route('dokter.obat.edit', $obat->id) }}"
                                             class="btn btn-secondary btn-sm">Edit</a>
 
-                                        <!-- Tombol Delete dengan konfirmasi menggunakan SweetAlert -->
-                                        <form action="{{ route('dokter.obat.destroy', $obat->id) }}" method="POST"
-                                            class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                onclick="confirmDelete(event)">
-                                                Delete
-                                            </button>
-                                        </form>
+                                        <!-- Jika obat telah dihapus (soft delete), tampilkan tombol restore -->
+                                        @if ($obat->trashed())
+                                            <!-- Soft Deleted -->
+                                            <a href="{{ route('dokter.obat.restore', $obat->id) }}"
+                                                class="btn btn-success btn-sm">Restore</a>
+                                        @else
+                                            <!-- Jika obat belum dihapus, tampilkan tombol delete -->
+                                            <form action="{{ route('dokter.obat.destroy', $obat->id) }}" method="POST"
+                                                class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                    onclick="confirmDelete(event)">Delete</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -79,26 +85,28 @@
         </div>
     </div>
 
-    <!-- JavaScript untuk konfirmasi penghapusan dengan SweetAlert -->
     <script>
+        // Fungsi konfirmasi penghapusan obat
         function confirmDelete(event) {
-            event.preventDefault(); // Mencegah form untuk submit langsung
+            event.preventDefault(); // Mencegah form submit secara langsung
 
+            // Menampilkan konfirmasi menggunakan SweetAlert2
             Swal.fire({
                 title: 'Apakah Anda yakin?',
-                text: "Data obat akan dihapus permanen!",
+                text: "Data obat akan dihapus!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Hapus!',
                 cancelButtonText: 'Batal'
             }).then((result) => {
+                // Jika tombol "Ya, Hapus!" ditekan, form akan disubmit
                 if (result.isConfirmed) {
-                    event.target.closest('form').submit(); // Men-submit form jika pengguna mengkonfirmasi
+                    event.target.closest('form').submit(); // Menyubmit form untuk menghapus data
                 }
             });
         }
     </script>
 
-    <!-- SweetAlert2 -->
+    <!-- Memuat SweetAlert2 dari CDN untuk menampilkan notifikasi -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </x-app-layout>

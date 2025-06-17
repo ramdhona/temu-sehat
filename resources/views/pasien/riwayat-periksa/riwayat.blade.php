@@ -1,4 +1,5 @@
 <x-app-layout>
+    <!-- Bagian Header -->
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
             {{ __('Riwayat Periksa') }}
@@ -7,6 +8,7 @@
 
     <div class="py-12">
         <div class="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
+            <!-- Box untuk menampilkan riwayat pemeriksaan -->
             <div class="p-4 bg-white shadow-sm sm:p-8 sm:rounded-lg">
                 <section>
                     <header class="mb-4">
@@ -18,6 +20,7 @@
                         </p>
                     </header>
 
+                    <!-- Detail Pemeriksaan -->
                     <div class="mb-4 border-2 card">
                         <div class="bg-white border-black card-header border-bottom">
                             <h5 class="mb-0 font-semibold text-gray-800 card-title">Detail Pemeriksaan</h5>
@@ -25,6 +28,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="border-black col-md-6 border-end">
+                                    <!-- Tanggal Pemeriksaan -->
                                     <div class="mb-3">
                                         <label class="font-semibold text-gray-700 form-label">Tanggal Periksa</label>
                                         <div class="form-control-plaintext">
@@ -33,6 +37,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
+                                    <!-- Catatan Pemeriksaan -->
                                     <div class="mb-3">
                                         <label class="font-semibold text-gray-700 form-label">Catatan</label>
                                         <div class="form-control-plaintext">
@@ -44,6 +49,7 @@
                         </div>
                     </div>
 
+                    <!-- Daftar Obat yang Diresepkan -->
                     <div class="mb-4 border-2 card">
                         <div class="bg-white border-black card-header border-bottom">
                             <h5 class="mb-0 font-semibold text-gray-800 card-title">Daftar Obat Diresepkan</h5>
@@ -61,11 +67,13 @@
                                     @endforeach
                                 </ul>
                             @else
+                                <!-- Pesan ketika tidak ada obat yang diresepkan -->
                                 <p class="mb-0 text-muted">Tidak ada obat yang diresepkan.</p>
                             @endif
                         </div>
                     </div>
 
+                    <!-- Biaya Pemeriksaan -->
                     <div class="mb-4 border-2 card bg-light">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
@@ -77,6 +85,7 @@
                         </div>
                     </div>
 
+                    <!-- Tombol Kembali -->
                     <div class="mt-4">
                         <a href="{{ route('pasien.riwayat-periksa.index') }}" class="btn btn-secondary">
                             <i class="bi bi-arrow-left me-1"></i> {{ __('Kembali') }}

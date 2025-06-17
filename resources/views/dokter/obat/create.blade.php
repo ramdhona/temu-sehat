@@ -1,5 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
+        <!-- Menampilkan header dengan judul 'Obat' -->
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
             {{ __('Obat') }}
         </h2>
@@ -20,7 +21,6 @@
                             <p class="mt-1 text-sm text-gray-600">
                                 {{ __('Silakan isi form di bawah ini untuk menambahkan data obat ke dalam sistem.') }}
                             </p>
-
                         </header>
 
                         <!-- Form untuk mengedit atau menambahkan data obat -->

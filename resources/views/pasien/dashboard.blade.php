@@ -18,7 +18,6 @@
                 </div>
             </div>
 
-
             <!-- Menambahkan baris untuk menampilkan card -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                 <!-- Card Riwayat Janji Periksa Belum Diperiksa -->
@@ -30,6 +29,7 @@
                             <div>
                                 <h3 class="text-lg font-medium">Belum Diperiksa</h3>
                                 <p class="text-2xl font-semibold">{{ $belumDiperiksaCount }}</p>
+                                <!-- Menampilkan jumlah janji periksa yang belum diperiksa -->
                             </div>
                         </div>
                     </div>
@@ -44,6 +44,7 @@
                             <div>
                                 <h3 class="text-lg font-medium">Sudah Diperiksa</h3>
                                 <p class="text-2xl font-semibold">{{ $sudahDiperiksaCount }}</p>
+                                <!-- Menampilkan jumlah janji periksa yang sudah diperiksa -->
                             </div>
                         </div>
                     </div>

@@ -38,6 +38,9 @@
                         <x-nav-link :href="route('dokter.riwayat-periksa.index')" :active="request()->routeIs('dokter.riwayat-periksa.index')">
                             {{ __('Riwayat Periksa') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('dokter.poli.index')" :active="request()->routeIs('dokter.poli.index')">
+                            {{ __('Poli') }}
+                        </x-nav-link>
                     @elseif(Auth::user()->role == 'pasien')
                         <x-nav-link :href="route('pasien.dashboard')" :active="request()->routeIs('pasien.dashboard')">
                             {{ __('Dashboard') }}

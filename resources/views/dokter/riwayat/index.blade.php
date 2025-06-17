@@ -1,5 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
+        <!-- Menampilkan header dengan judul 'Riwayat Pemeriksaan Pasien' -->
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
             {{ __('Riwayat Pemeriksaan Pasien') }}
         </h2>
@@ -8,7 +9,7 @@
     <div class="py-12">
         <div class="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
             <div class="p-4 bg-white shadow-sm sm:p-8 sm:rounded-lg">
-                <!-- Header untuk menampilkan judul dan tombol untuk menambah jadwal -->
+                <!-- Header untuk menampilkan judul halaman -->
                 <header class="flex items-center justify-between">
                     <h2 class="text-lg font-medium text-gray-900">
                         {{ __('Riwayat Pemeriksaan Pasien') }}
@@ -28,21 +29,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Loop untuk menampilkan semua pasien -->
+                        <!-- Loop untuk menampilkan data pasien -->
                         @foreach ($pasien as $key => $p)
                             <tr>
-                                <!-- Menampilkan nomor urut pasien -->
+                                <!-- Menampilkan nomor urut pasien, menggunakan $loop->iteration -->
                                 <th scope="row" class="align-middle text-start">{{ $loop->iteration }}</th>
+
                                 <!-- Menampilkan nama pasien -->
                                 <td class="align-middle text-start">{{ $p->nama }}</td>
+
                                 <!-- Menampilkan alamat pasien -->
                                 <td class="align-middle text-start">{{ $p->alamat }}</td>
+
                                 <!-- Menampilkan nomor KTP pasien -->
                                 <td class="align-middle text-start">{{ $p->no_ktp }}</td>
+
                                 <!-- Menampilkan nomor HP pasien -->
                                 <td class="align-middle text-start">{{ $p->no_hp }}</td>
 
-                                <!-- Menampilkan aksi -->
+                                <!-- Tombol untuk melihat riwayat pemeriksaan pasien -->
                                 <td class="flex items-center gap-3">
                                     {{-- Tombol untuk melihat riwayat pemeriksaan pasien --}}
                                     <a href="{{ route('dokter.riwayat-periksa.show', $p->id) }}"
