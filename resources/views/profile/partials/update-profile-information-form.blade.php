@@ -78,20 +78,22 @@
                 required autocomplete="id_number" />
             <x-input-error class="mt-2" :messages="$errors->get('no_ktp')" />
         </div>
-
         <!-- Kolom input untuk memperbarui informasi poli (dropdown select) -->
-        <div>
-            <x-input-label for="poli" :value="__('Poli')" />
-            <select id="poli" name="poli_id" class="mt-1 block w-full" required>
-                @foreach ($polis as $poli)
-                    <option value="{{ $poli->id }}" {{ $user->poli_id == $poli->id ? 'selected' : '' }}>
-                        {{ $poli->nama_poli }}
-                    </option>
-                @endforeach
-            </select>
+        @if (auth()->user()->hasRole('dokter'))
+            <!-- Memeriksa apakah user memiliki role 'dokter' -->
+            <div>
+                <x-input-label for="poli" :value="__('Poli')" />
+                <select id="poli" name="poli_id" class="mt-1 block w-full" required>
+                    @foreach ($polis as $poli)
+                        <option value="{{ $poli->id }}" {{ $user->poli_id == $poli->id ? 'selected' : '' }}>
+                            {{ $poli->nama_poli }}
+                        </option>
+                    @endforeach
+                </select>
 
-            <x-input-error class="mt-2" :messages="$errors->get('poli_id')" />
-        </div>
+                <x-input-error class="mt-2" :messages="$errors->get('poli_id')" />
+            </div>
+        @endif
 
         <!-- Tombol untuk menyimpan perubahan profil pengguna -->
         <div class="flex items-center gap-4">

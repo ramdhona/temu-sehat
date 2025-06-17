@@ -81,6 +81,8 @@ Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function () 
         Route::patch('/{poli}', [PoliController::class, 'update'])->name('dokter.poli.update');
         Route::delete('/{poli}', [PoliController::class, 'destroy'])->name('dokter.poli.destroy');
     });
+
+    
 });
 
 // Routes untuk role 'pasien'

@@ -33,4 +33,10 @@ class RoleMiddleware
         // Jika peran sesuai, lanjutkan ke request berikutnya
         return $next($request);
     }
+
+    protected $routeMiddleware = [
+    // Middleware lainnya
+    'role' => \App\Http\Middleware\RoleMiddleware::class,
+];
+
 }
